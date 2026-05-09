@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Exam Practice!</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --pink: #FF6B9D;
+    --blue: #4FC3F7;
+    --green: #81C784;
+    --orange: #FFB74D;
+    --purple: #CE93D8;
+    --yellow: #FFF176;
+    --red: #EF5350;
+    --bg: #F0F4FF;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ---- NAV / HOME ---- */
+  .home-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    animation: fadeIn 0.5s;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes pop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+  @keyframes starSpin { from { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.3); } to { transform: rotate(360deg) scale(1); } }
+  @keyframes confetti { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(-100px) rotate(720deg); opacity: 0; } }
+  @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+
+  .main-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5em;
+    color: #333;
+    text-align: center;
+    margin-bottom: 5px;
+  }
+  .main-subtitle {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .exam-day {
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 25px;
+  }
+  .exam-day h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4em;
+    padding: 12px 20px;
+    border-radius: 15px 15px 0 0;
+    color: white;
+  }
+  .day1 h2 { background: linear-gradient(135deg, #4FC3F7, #2196F3); }
+  .day2 h2 { background: linear-gradient(135deg, #CE93D8, #9C27B0); }
+
+  .topics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 15px;
+    background: white;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  }
+
+  .topic-card {
+    background: linear-gradient(135deg, var(--card-color1), var(--card-color2));
+    border: none;
+    border-radius: 15px;
+    padding: 20px 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.95em;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  }
+  .topic-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+  .topic-card:active { transform: scale(0.97); }
+  .topic-card .icon { font-size: 2.2em; }
+
+  .progress-badge {
+    background: rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 0.75em;
+    font-weight: 600;
+  }
+
+  /* ---- LESSON SCREEN ---- */
+  .lesson-screen {
+    display: none;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s;
+  }
+
+  .lesson-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  .back-btn {
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 1.4em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .back-btn:hover { background: #f0f0f0; transform: scale(1.1); }
+
+  .lesson-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.6em;
+    color: #333;
+  }
+
+  /* Theory cards */
+  .theory-card {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    border-left: 5px solid var(--blue);
+  }
+  .theory-card h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 12px;
+  }
+  .theory-card p {
+    font-size: 1.05em;
+    line-height: 1.7;
+    color: #444;
+  }
+
+  .example-box {
+    background: #E3F2FD;
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin: 10px 0;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .example-box.green { background: #E8F5E9; }
+  .example-box.orange { background: #FFF3E0; }
+  .example-box.pink { background: #FCE4EC; }
+  .example-box .arrow { font-size: 1.3em; }
+
+  /* Exercises */
+  .exercise-card {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    border-left: 5px solid var(--green);
+  }
+  .exercise-card h3 {
+    font-family: 'Fredoka One', cursive;
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.15em;
+  }
+
+  .exercise-item {
+    margin-bottom: 15px;
+    padding: 12px 15px;
+    background: #FAFAFA;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .exercise-item span {
+    font-size: 1.05em;
+    color: #333;
+  }
+
+  .answer-input {
+    border: 2px dashed #B0BEC5;
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 1em;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    width: 150px;
+    text-align: center;
+    outline: none;
+    transition: all 0.3s;
+    background: white;
+  }
+  .answer-input:focus { border-color: var(--blue); background: #E3F2FD; }
+  .answer-input.correct { border-color: var(--green); background: #E8F5E9; color: #2E7D32; }
+  .answer-input.incorrect { border-color: var(--red); background: #FFEBEE; color: #C62828; animation: shake 0.4s; }
+
+  .check-btn {
+    background: linear-gradient(135deg, var(--green), #4CAF50);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 35px;
+    font-size: 1.1em;
+    font-weight: 800;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.2s;
+    box-shadow: 0 3px 10px rgba(76,175,80,0.3);
+  }
+  .check-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(76,175,80,0.4); }
+
+  .reset-btn {
+    background: linear-gradient(135deg, var(--orange), #FF9800);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 25px;
+    font-size: 1em;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 10px;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { transform: translateY(-2px); }
+
+  .result-msg {
+    margin-top: 15px;
+    font-size: 1.2em;
+    font-weight: 800;
+    text-align: center;
+    padding: 15px;
+    border-radius: 15px;
+    animation: pop 0.4s;
+    display: none;
+  }
+  .result-msg.show { display: block; }
+  .result-msg.great { background: #E8F5E9; color: #2E7D32; }
+  .result-msg.good { background: #FFF3E0; color: #E65100; }
+  .result-msg.try { background: #FFEBEE; color: #C62828; }
+
+  /* Drag & Drop options */
+  .options-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #F5F5F5;
+    border-radius: 12px;
+  }
+  .option-pill {
+    background: linear-gradient(135deg, var(--blue), #2196F3);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 1em;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .option-pill:hover { transform: scale(1.05); }
+  .option-pill.used { opacity: 0.4; pointer-events: none; }
+  .option-pill.purple { background: linear-gradient(135deg, var(--purple), #9C27B0); }
+  .option-pill.pink { background: linear-gradient(135deg, var(--pink), #E91E63); }
+  .option-pill.orange { background: linear-gradient(135deg, var(--orange), #FF9800); }
+
+  /* Prepositions scene */
+  .scene-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 20px;
+    background: #FFF9C4;
+    border-radius: 18px;
+    padding: 30px;
+    min-height: 280px;
+    border: 3px solid #FDD835;
+  }
+  .scene-obj {
+    position: absolute;
+    font-size: 2.5em;
+    transition: all 0.5s;
+  }
+  .scene-reference {
+    position: absolute;
+    font-size: 3em;
+  }
+  .scene-question {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-top: 10px;
+    color: #333;
+  }
+
+  .prep-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  .prep-btn {
+    background: white;
+    border: 3px solid #ddd;
+    border-radius: 15px;
+    padding: 12px 20px;
+    font-size: 1.1em;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 100px;
+  }
+  .prep-btn:hover { border-color: var(--blue); background: #E3F2FD; transform: translateY(-2px); }
+  .prep-btn.correct { border-color: var(--green); background: #E8F5E9; color: #2E7D32; }
+  .prep-btn.wrong { border-color: var(--red); background: #FFEBEE; color: #C62828; animation: shake 0.3s; }
+
+  .score-display {
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: 800;
+    color: #333;
+    margin: 15px 0;
+  }
+  .stars { font-size: 1.5em; }
+  .star { display: inline-block; animation: starSpin 0.6s; }
+
+  /* Tabs for sections within a lesson */
+  .section-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .section-tab {
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 0.95em;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .section-tab.active {
+    background: var(--blue);
+    color: white;
+    border-color: var(--blue);
+  }
+  .section-tab:hover:not(.active) { border-color: var(--blue); }
+
+  .section-content { display: none; animation: fadeIn 0.3s; }
+  .section-content.active { display: block; }
+
+  /* Multiple choice grid */
+  .mc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .mc-btn {
+    background: white;
+    border: 3px solid #E0E0E0;
+    border-radius: 15px;
+    padding: 15px;
+    font-size: 1.1em;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .mc-btn:hover { border-color: var(--blue); background: #E3F2FD; }
+  .mc-btn.correct { border-color: var(--green); background: #E8F5E9; color: #2E7D32; }
+  .mc-btn.wrong { border-color: var(--red); background: #FFEBEE; }
+
+  .sentence-builder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 50px;
+    padding: 15px;
+    background: #F5F5F5;
+    border-radius: 12px;
+    border: 2px dashed #BDBDBD;
+    margin-bottom: 10px;
+    align-items: center;
+  }
+
+  .confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    animation: confetti 1.5s ease-out forwards;
+  }
+
+  @media (max-width: 600px) {
+    .topics-grid { grid-template-columns: 1fr; }
+    .main-title { font-size: 1.8em; }
+    .mc-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HOME SCREEN -->
+<div class="home-screen" id="homeScreen">
+  <div style="font-size:3em; animation: bounce 2s infinite;">📚</div>
+  <h1 class="main-title">English Exam Practice!</h1>
+  <p class="main-subtitle">Choose a topic to start learning</p>
+
+  <div class="exam-day day1">
+    <h2>Monday - May 11th</h2>
+    <div class="topics-grid">
+      <button class="topic-card" style="--card-color1:#FF6B9D;--card-color2:#E91E63" onclick="openLesson('plurals')">
+        <span class="icon">🐭</span>
+        Irregular Plurals
+        <span class="progress-badge" id="prog-plurals">Let's go!</span>
+      </button>
+      <button class="topic-card" style="--card-color1:#4FC3F7;--card-color2:#2196F3" onclick="openLesson('prepositions')">
+        <span class="icon">📦</span>
+        Prepositions of Place
+        <span class="progress-badge" id="prog-prepositions">Let's go!</span>
+      </button>
+      <button class="topic-card" style="--card-color1:#81C784;--card-color2:#4CAF50" onclick="openLesson('progressive')" style="grid-column: 1/-1;">
+        <span class="icon">🏃</span>
+        Present Progressive
+        <span class="progress-badge" id="prog-progressive">Let's go!</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="exam-day day2">
+    <h2>Tuesday - May 12th</h2>
+    <div class="topics-grid">
+      <button class="topic-card" style="--card-color1:#FFB74D;--card-color2:#FF9800" onclick="openLesson('punctuation')">
+        <span class="icon">❓</span>
+        Punctuation Marks
+        <span class="progress-badge" id="prog-punctuation">Let's go!</span>
+      </button>
+      <button class="topic-card" style="--card-color1:#CE93D8;--card-color2:#9C27B0" onclick="openLesson('telling')">
+        <span class="icon">💬</span>
+        Telling Sentences
+        <span class="progress-badge" id="prog-telling">Let's go!</span>
+      </button>
+      <button class="topic-card" style="--card-color1:#4DB6AC;--card-color2:#009688" onclick="openLesson('questions')">
+        <span class="icon">🤔</span>
+        Questions
+        <span class="progress-badge" id="prog-questions">Let's go!</span>
+      </button>
+      <button class="topic-card" style="--card-color1:#EF5350;--card-color2:#D32F2F" onclick="openLesson('exclamatory')">
+        <span class="icon">😲</span>
+        Exclamatory
+        <span class="progress-badge" id="prog-exclamatory">Let's go!</span>
+      </button>
+      <button class="topic-card" style="--card-color1:#7986CB;--card-color2:#3F51B5;grid-column:1/-1" onclick="openLesson('complete')">
+        <span class="icon">✏️</span>
+        Complete Sentences
+        <span class="progress-badge" id="prog-complete">Let's go!</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- LESSON SCREEN (dynamic content) -->
+<div class="lesson-screen" id="lessonScreen">
+  <div class="lesson-header">
+    <button class="back-btn" onclick="goHome()">&#8592;</button>
+    <h2 class="lesson-title" id="lessonTitle"></h2>
+  </div>
+  <div id="lessonContent"></div>
+</div>
+
+<div class="confetti-container" id="confettiContainer"></div>
+
+<script>
+// ============ NAVIGATION ============
+function goHome() {
+  document.getElementById('homeScreen').style.display = 'flex';
+  document.getElementById('lessonScreen').style.display = 'none';
+  window.scrollTo(0, 0);
+}
+
+function openLesson(id) {
+  document.getElementById('homeScreen').style.display = 'none';
+  const ls = document.getElementById('lessonScreen');
+  ls.style.display = 'block';
+  ls.style.animation = 'none';
+  ls.offsetHeight;
+  ls.style.animation = 'fadeIn 0.4s';
+  window.scrollTo(0, 0);
+  lessons[id]();
+}
+
+// ============ HELPERS ============
+function showConfetti() {
+  const c = document.getElementById('confettiContainer');
+  const colors = ['#FF6B9D','#4FC3F7','#81C784','#FFB74D','#CE93D8','#FFF176','#EF5350'];
+  for (let i = 0; i < 40; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.top = (Math.random() * 50 + 30) + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 0.5 + 's';
+    piece.style.animationDuration = (1 + Math.random()) + 's';
+    c.appendChild(piece);
+  }
+  setTimeout(() => c.innerHTML = '', 2500);
+}
+
+function checkAnswers(inputs, answers, resultId) {
+  let correct = 0;
+  inputs.forEach((inp, i) => {
+    const el = document.getElementById(inp);
+    const val = el.value.trim().toLowerCase();
+    const expected = Array.isArray(answers[i]) ? answers[i] : [answers[i]];
+    if (expected.map(a => a.toLowerCase()).includes(val)) {
+      el.className = 'answer-input correct';
+      correct++;
+    } else {
+      el.className = 'answer-input incorrect';
+    }
+  });
+  const res = document.getElementById(resultId);
+  res.classList.add('show');
+  if (correct === inputs.length) {
+    res.className = 'result-msg show great';
+    res.innerHTML = '🌟 Perfect! You got all ' + correct + ' correct! 🌟';
+    showConfetti();
+  } else if (correct >= inputs.length / 2) {
+    res.className = 'result-msg show good';
+    res.innerHTML = '👍 Good job! You got ' + correct + ' out of ' + inputs.length + '. Try the rest again!';
+  } else {
+    res.className = 'result-msg show try';
+    res.innerHTML = '💪 Keep trying! You got ' + correct + ' out of ' + inputs.length + '. You can do it!';
+  }
+}
+
+function resetInputs(ids, resultId) {
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+    el.className = 'answer-input';
+  });
+  const res = document.getElementById(resultId);
+  res.classList.remove('show');
+}
+
+function fillInput(targetId, value, pillEl) {
+  const inp = document.getElementById(targetId);
+  if (inp && !inp.value) {
+    inp.value = value;
+    pillEl.classList.add('used');
+  }
+}
+
+// ============ LESSONS ============
+const lessons = {};
+
+// ---------- 1. IRREGULAR PLURALS ----------
+lessons.plurals = function() {
+  document.getElementById('lessonTitle').textContent = '🐭 Nouns: Irregular Plurals';
+  document.getElementById('lessonContent').innerHTML = `
+    <div class="theory-card">
+      <h3>📖 What are Plurals?</h3>
+      <p><b>Plural</b> means <b>more than one</b>. When we have many things, we change the word!</p>
+      <div class="example-box">
+        <span>1 car</span> <span class="arrow">➡️</span> <span><b>2 cars</b> (add <b>-s</b>)</span>
+      </div>
+      <div class="example-box green">
+        <span>1 brush</span> <span class="arrow">➡️</span> <span><b>3 brushes</b> (add <b>-es</b> for words ending in sh, ch)</span>
+      </div>
+      <div class="example-box orange">
+        <span>1 peach</span> <span class="arrow">➡️</span> <span><b>5 peaches</b> (add <b>-es</b>)</span>
+      </div>
+    </div>
+
+    <div class="theory-card" style="border-left-color: var(--pink);">
+      <h3>🌟 Irregular Plurals - Special Words!</h3>
+      <p>Some words are <b>special</b>! They don't just add -s. They <b>change</b> completely!</p>
+      <div class="example-box pink">
+        <span>1 child</span> <span class="arrow">➡️</span> <span><b>children</b></span>
+      </div>
+      <div class="example-box pink">
+        <span>1 mouse</span> <span class="arrow">➡️</span> <span><b>mice</b></span>
+      </div>
+      <div class="example-box pink">
+        <span>1 woman</span> <span class="arrow">➡️</span> <span><b>women</b></span>
+      </div>
+      <div class="example-box pink">
+        <span>1 man</span> <span class="arrow">➡️</span> <span><b>men</b></span>
+      </div>
+      <div class="example-box pink">
+        <span>1 mailman</span> <span class="arrow">➡️</span> <span><b>mailmen</b></span>
+      </div>
+      <div class="example-box pink">
+        <span>1 policeman</span> <span class="arrow">➡️</span> <span><b>policemen</b></span>
+      </div>
+    </div>
+
+    <div class="exercise-card">
+      <h3>✍️ Exercise 1: Write the plural!</h3>
+      <div class="exercise-item">
+        <span>1. child ➡️</span>
+        <input type="text" class="answer-input" id="pl1" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>2. woman ➡️</span>
+        <input type="text" class="answer-input" id="pl2" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>3. policeman ➡️</span>
+        <input type="text" class="answer-input" id="pl3" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>4. mouse ➡️</span>
+        <input type="text" class="answer-input" id="pl4" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>5. mailman ➡️</span>
+        <input type="text" class="answer-input" id="pl5" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>6. brush ➡️</span>
+        <input type="text" class="answer-input" id="pl6" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>7. peach ➡️</span>
+        <input type="text" class="answer-input" id="pl7" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>8. man ➡️</span>
+        <input type="text" class="answer-input" id="pl8" placeholder="?">
+      </div>
+      <button class="check-btn" onclick="checkAnswers(
+        ['pl1','pl2','pl3','pl4','pl5','pl6','pl7','pl8'],
+        ['children','women','policemen','mice','mailmen','brushes','peaches','men'],
+        'plResult'
+      )">Check My Answers! ✅</button>
+      <button class="reset-btn" onclick="resetInputs(['pl1','pl2','pl3','pl4','pl5','pl6','pl7','pl8'],'plResult')">Try Again 🔄</button>
+      <div class="result-msg" id="plResult"></div>
+    </div>
+
+    <div class="exercise-card" style="border-left-color: var(--purple);">
+      <h3>🧩 Exercise 2: Choose the correct plural!</h3>
+      <div id="plMC"></div>
+      <div class="score-display" id="plMCScore"></div>
+    </div>
+  `;
+
+  const mcData = [
+    { word: 'child', options: ['childs', 'children', 'childes', 'childen'], answer: 1 },
+    { word: 'mouse', options: ['mouses', 'mousies', 'mice', 'mices'], answer: 2 },
+    { word: 'woman', options: ['womans', 'women', 'womens', 'womanies'], answer: 1 },
+    { word: 'policeman', options: ['policemans', 'policemanies', 'policemens', 'policemen'], answer: 3 },
+    { word: 'peach', options: ['peachs', 'peaches', 'peachies', 'peachen'], answer: 1 },
+  ];
+  let mcIdx = 0, mcCorrect = 0;
+  function showMC() {
+    if (mcIdx >= mcData.length) {
+      document.getElementById('plMC').innerHTML = '<div style="text-align:center;font-size:1.3em;font-weight:800;color:#2E7D32;">🎉 Done! You got ' + mcCorrect + '/' + mcData.length + ' correct!</div>';
+      if (mcCorrect === mcData.length) showConfetti();
+      return;
+    }
+    const q = mcData[mcIdx];
+    document.getElementById('plMCScore').textContent = 'Question ' + (mcIdx+1) + ' of ' + mcData.length;
+    let html = '<p style="font-size:1.2em;font-weight:700;margin-bottom:12px;">What is the plural of <span style="color:#E91E63;font-size:1.3em;">' + q.word + '</span>?</p>';
+    html += '<div class="mc-grid">';
+    q.options.forEach((opt, i) => {
+      html += '<button class="mc-btn" onclick="checkMCPl(this,' + i + ',' + q.answer + ')">' + opt + '</button>';
+    });
+    html += '</div>';
+    document.getElementById('plMC').innerHTML = html;
+  }
+  window.checkMCPl = function(el, chosen, correct) {
+    const btns = el.parentElement.querySelectorAll('.mc-btn');
+    btns.forEach((b, i) => {
+      b.style.pointerEvents = 'none';
+      if (i === correct) b.className = 'mc-btn correct';
+      else if (i === chosen) b.className = 'mc-btn wrong';
+    });
+    if (chosen === correct) mcCorrect++;
+    setTimeout(() => { mcIdx++; showMC(); }, 1200);
+  };
+  showMC();
+};
+
+// ---------- 2. PREPOSITIONS OF PLACE ----------
+lessons.prepositions = function() {
+  document.getElementById('lessonTitle').textContent = '📦 Prepositions of Place';
+  document.getElementById('lessonContent').innerHTML = `
+    <div class="theory-card">
+      <h3>📖 Where is it?</h3>
+      <p>Prepositions of place tell us <b>WHERE</b> something is!</p>
+      <div class="example-box">📦 <b>in</b> = inside something (The toy is <b>in</b> the box)</div>
+      <div class="example-box green">📦 <b>on</b> = on top of something (The book is <b>on</b> the table)</div>
+      <div class="example-box orange">📦 <b>under</b> = below something (The cat is <b>under</b> the bed)</div>
+      <div class="example-box pink">📦 <b>near</b> = close to something (The lamp is <b>near</b> the sofa)</div>
+      <div class="example-box">📦 <b>next to</b> = right beside (I sit <b>next to</b> my friend)</div>
+      <div class="example-box green">📦 <b>behind</b> = at the back (The dog is <b>behind</b> the tree)</div>
+      <div class="example-box orange">📦 <b>in front of</b> = at the front (The car is <b>in front of</b> the house)</div>
+      <div class="example-box pink">📦 <b>between</b> = in the middle of two things (I am <b>between</b> mom and dad)</div>
+    </div>
+
+    <div class="exercise-card" style="border-left-color: var(--orange);">
+      <h3>🎮 Game: Where is the cat? (Click the correct answer!)</h3>
+      <div class="scene-container" id="prepScene"></div>
+      <div class="scene-question" id="prepQuestion"></div>
+      <div class="prep-options" id="prepOptions"></div>
+      <div class="score-display" id="prepScore"></div>
+      <button class="reset-btn" onclick="startPrepGame()" style="display:block;margin:10px auto;">Play Again 🔄</button>
+    </div>
+
+    <div class="exercise-card">
+      <h3>✍️ Exercise: Write the preposition!</h3>
+      <p style="margin-bottom:10px;color:#666;">Use the Word Bank: <b>on, under, in front of, behind, next to, between, in, near</b></p>
+      <div class="exercise-item">
+        <span>1. The cat is _____ the box. (inside the box)</span>
+        <input type="text" class="answer-input" id="pp1" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>2. The apple is _____ the box. (on top)</span>
+        <input type="text" class="answer-input" id="pp2" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>3. The ball is _____ the table. (below)</span>
+        <input type="text" class="answer-input" id="pp3" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>4. The dog is _____ the house. (at the back)</span>
+        <input type="text" class="answer-input" id="pp4" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>5. Mom is _____ dad. (right beside)</span>
+        <input type="text" class="answer-input" id="pp5" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>6. The tree is _____ the school. (at the front)</span>
+        <input type="text" class="answer-input" id="pp6" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>7. I am _____ my two friends. (in the middle)</span>
+        <input type="text" class="answer-input" id="pp7" placeholder="?">
+      </div>
+      <div class="exercise-item">
+        <span>8. The lamp is _____ the sofa. (close to it)</span>
+        <input type="text" class="answer-input" id="pp8" placeholder="?">
+      </div>
+      <button class="check-btn" onclick="checkAnswers(
+        ['pp1','pp2','pp3','pp4','pp5','pp6','pp7','pp8'],
+        ['in','on','under','behind','next to',['in front of'],['between'],['near']],
+        'ppResult'
+      )">Check My Answers! ✅</button>
+      <button class="reset-btn" onclick="resetInputs(['pp1','pp2','pp3','pp4','pp5','pp6','pp7','pp8'],'ppResult')">Try Again 🔄</button>
+      <div class="result-msg" id="ppResult"></div>
+    </div>
+  `;
+  startPrepGame();
+};
+
+function startPrepGame() {
+  const scenes = [
+    { obj:'🐱', ref:'📦', objPos:{left:'42%',top:'10%'}, refPos:{left:'38%',top:'45%'}, answer:'on', q:'Where is the cat? The cat is _____ the box.' },
+    { obj:'🐱', ref:'📦', objPos:{left:'42%',top:'72%'}, refPos:{left:'38%',top:'40%'}, answer:'under', q:'Where is the cat? The cat is _____ the box.' },
+    { obj:'🐱', ref:'📦', objPos:{left:'15%',top:'45%'}, refPos:{left:'55%',top:'45%'}, answer:'in front of', q:'Where is the cat? The cat is _____ the box.' },
+    { obj:'🐱', ref:'📦', objPos:{left:'75%',top:'45%'}, refPos:{left:'35%',top:'45%'}, answer:'behind', q:'Where is the cat? The cat is _____ the box.' },
+    { obj:'🐱', ref:'📦', objPos:{left:'62%',top:'45%'}, refPos:{left:'35%',top:'45%'}, answer:'next to', q:'Where is the cat? The cat is _____ the box.' },
+    { obj:'🐱', ref:'🛋️', objPos:{left:'42%',top:'48%'}, refPos:{left:'35%',top:'40%'}, answer:'in', q:'Where is the cat? The cat is _____ the sofa.' },
+    { obj:'🐱', ref1:'📦', ref2:'🎒', ref1Pos:{left:'20%',top:'45%'}, ref2Pos:{left:'65%',top:'45%'}, objPos:{left:'42%',top:'45%'}, answer:'between', q:'Where is the cat? The cat is _____ the box and the bag.' },
+    { obj:'🐱', ref:'🪑', objPos:{left:'60%',top:'48%'}, refPos:{left:'35%',top:'45%'}, answer:'near', q:'Where is the cat? The cat is _____ the chair.' },
+  ];
+
+  let idx = 0, score = 0;
+  const allPreps = ['in','on','under','near','next to','behind','in front of','between'];
+
+  function showScene() {
+    if (idx >= scenes.length) {
+      document.getElementById('prepScene').innerHTML = '<div style="text-align:center;padding:60px;font-size:2em;">🎉</div>';
+      document.getElementById('prepQuestion').textContent = '';
+      document.getElementById('prepOptions').innerHTML = '';
+      document.getElementById('prepScore').innerHTML = '🌟 You got <b>' + score + '</b> out of <b>' + scenes.length + '</b>! ' + (score >= 6 ? 'Amazing!' : 'Keep practicing!');
+      if (score >= 6) showConfetti();
+      return;
+    }
+    const s = scenes[idx];
+    let sceneHTML = '<div class="scene-obj" style="left:'+s.objPos.left+';top:'+s.objPos.top+'">'+s.obj+'</div>';
+    if (s.ref) sceneHTML += '<div class="scene-reference" style="left:'+s.refPos.left+';top:'+s.refPos.top+'">'+s.ref+'</div>';
+    if (s.ref1) {
+      sceneHTML += '<div class="scene-reference" style="left:'+s.ref1Pos.left+';top:'+s.ref1Pos.top+'">'+s.ref1+'</div>';
+      sceneHTML += '<div class="scene-reference" style="left:'+s.ref2Pos.left+';top:'+s.ref2Pos.top+'">'+s.ref2+'</div>';
+    }
+    document.getElementById('prepScene').innerHTML = sceneHTML;
+    document.getElementById('prepQuestion').textContent = s.q;
+    document.getElementById('prepScore').textContent = 'Question ' + (idx+1) + ' of ' + scenes.length + ' | Score: ' + score;
+
+    const shuffled = [...allPreps].sort(() => Math.random() - 0.5).slice(0, 4);
+    if (!shuffled.includes(s.answer)) shuffled[Math.floor(Math.random()*4)] = s.answer;
+    let optHTML = '';
+    shuffled.forEach(p => {
+      optHTML += '<button class="prep-btn" onclick="checkPrep(this,\'' + p + '\',\'' + s.answer + '\')">' + p + '</button>';
+    });
+    document.getElementById('prepOptions').innerHTML = optHTML;
+  }
+
+  window.checkPrep = function(el, chosen, correct) {
+    const btns = document.querySelectorAll('.prep-btn');
+    btns.forEach(b => {
+      b.style.pointerEvents = 'none';
+      if (b.textContent === correct) b.className = 'prep-btn correct';
+      else if (b === el && chosen !== correct) b.className = 'prep-btn wrong';
+    });
+    if (chosen === correct) score++;
+    setTimeout(() => { idx++; showScene(); }, 1200);
+  };
+  showScene();
+}
+
+// ---------- 3. PRESENT PROGRESSIVE ----------
+lessons.progressive = function() {
+  document.getElementById('lessonTitle').textContent = '🏃 Present Progressive';
+  document.getElementById('lessonContent').innerHTML = `
+    <div class="section-tabs">
+      <button class="section-tab active" onclick="showSection('progLearn',this)">📖 Learn</button>
+      <button class="section-tab" onclick="showSection('progPos',this)">✅ Positive</button>
+      <button class="section-tab" onclick="showSection('progNeg',this)">❌ Negative</button>
+      <button class="section-tab" onclick="showSection('progQ',this)">❓ Questions</button>
+    </div>
+
+    <div class="section-content active" id="progLearn">
+      <div class="theory-card">
+        <h3>📖 What is Present Progressive?</h3>
+        <p>We use it to talk about things happening <b>RIGHT NOW</b>!</p>
+        <p style="margin-top:10px;font-size:1.1em;"><b>How to make it:</b></p>
+        <div class="example-box" style="font-size:1.2em;">
+          <b>Subject + am/is/are + verb + ing</b>
+        </div>
+        <div style="margin-top:15px;">
+          <div class="example-box green"><b>I</b> ➡️ <b>am</b></div>
+          <div class="example-box orange"><b>He / She / It</b> ➡️ <b>is</b></div>
+          <div class="example-box pink"><b>You / We / They</b> ➡️ <b>are</b></div>
+        </div>
+      </div>
+      <div class="theory-card" style="border-left-color:var(--green)">
+        <h3>🌟 Examples</h3>
+        <div class="example-box">I <b>am reading</b> a book. 📖</div>
+        <div class="example-box green">He <b>is eating</b> cereal. 🥣</div>
+        <div class="example-box orange">They <b>are walking</b> to school. 🚶</div>
+        <div class="example-box pink">She <b>is playing</b> in the park. ⚽</div>
+        <div class="example-box">We <b>are jumping</b> rope. 🪢</div>
+      </div>
+    </div>
+
+    <div class="section-content" id="progPos">
+      <div class="exercise-card">
+        <h3>✍️ Complete with am/is/are + verb-ing</h3>
+        <p style="margin-bottom:12px;color:#666;">Example: He <b>is playing</b> (play) outside.</p>
+        <div class="exercise-item">
+          <span>1. He</span>
+          <input type="text" class="answer-input" id="pg1" placeholder="?" style="width:200px">
+          <span>outside. (play)</span>
+        </div>
+        <div class="exercise-item">
+          <span>2. They</span>
+          <input type="text" class="answer-input" id="pg2" placeholder="?" style="width:200px">
+          <span>rope. (jump)</span>
+        </div>
+        <div class="exercise-item">
+          <span>3. I</span>
+          <input type="text" class="answer-input" id="pg3" placeholder="?" style="width:200px">
+          <span>a picture. (draw)</span>
+        </div>
+        <div class="exercise-item">
+          <span>4. She</span>
+          <input type="text" class="answer-input" id="pg4" placeholder="?" style="width:200px">
+          <span>the ball. (kick)</span>
+        </div>
+        <div class="exercise-item">
+          <span>5. You</span>
+          <input type="text" class="answer-input" id="pg5" placeholder="?" style="width:200px">
+          <span>(paint)</span>
+        </div>
+        <div class="exercise-item">
+          <span>6. We</span>
+          <input type="text" class="answer-input" id="pg6" placeholder="?" style="width:200px">
+          <span>here. (sleep)</span>
+        </div>
+        <div class="exercise-item">
+          <span>7. He</span>
+          <input type="text" class="answer-input" id="pg7" placeholder="?" style="width:200px">
+          <span>very hard. (work)</span>
+        </div>
+        <button class="check-btn" onclick="checkAnswers(
+          ['pg1','pg2','pg3','pg4','pg5','pg6','pg7'],
+          ['is playing','are jumping','am drawing','is kicking','are painting','are sleeping','is working'],
+          'pgResult'
+        )">Check My Answers! ✅</button>
+        <button class="reset-btn" onclick="resetInputs(['pg1','pg2','pg3','pg4','pg5','pg6','pg7'],'pgResult')">Try Again 🔄</button>
+        <div class="result-msg" id="pgResult"></div>
+      </div>
+
+      <div class="exercise-card" style="border-left-color:var(--orange)">
+        <h3>🧩 Choose the correct verb!</h3>
+        <p style="margin-bottom:10px;color:#666;">Pick the right word for each sentence.</p>
+        <div class="exercise-item">
+          <span>1. Mary and John are _____ in the park.</span>
+          <input type="text" class="answer-input" id="pgc1" placeholder="?">
+          <span style="color:#999">(playing / coloring)</span>
+        </div>
+        <div class="exercise-item">
+          <span>2. Suzy is _____ the pictures.</span>
+          <input type="text" class="answer-input" id="pgc2" placeholder="?">
+          <span style="color:#999">(coloring / jumping)</span>
+        </div>
+        <div class="exercise-item">
+          <span>3. Darcy is _____ in the puddles.</span>
+          <input type="text" class="answer-input" id="pgc3" placeholder="?">
+          <span style="color:#999">(jumping / painting)</span>
+        </div>
+        <div class="exercise-item">
+          <span>4. The horse is _____ the school.</span>
+          <input type="text" class="answer-input" id="pgc4" placeholder="?">
+          <span style="color:#999">(painting / drinking)</span>
+        </div>
+        <div class="exercise-item">
+          <span>5. We are _____ water.</span>
+          <input type="text" class="answer-input" id="pgc5" placeholder="?">
+          <span style="color:#999">(drinking / waiting)</span>
+        </div>
+        <button class="check-btn" onclick="checkAnswers(
+          ['pgc1','pgc2','pgc3','pgc4','pgc5'],
+          ['playing','coloring','jumping','painting','drinking'],
+          'pgcResult'
+        )">Check! ✅</button>
+        <button class="reset-btn" onclick="resetInputs(['pgc1','pgc2','pgc3','pgc4','pgc5'],'pgcResult')">Try Again 🔄</button>
+        <div class="result-msg" id="pgcResult"></div>
+      </div>
+    </div>
+
+    <div class="section-content" id="progNeg">
+      <div class="theory-card" style="border-left-color:var(--red)">
+        <h3>❌ Negative Form</h3>
+        <p>To say something is <b>NOT</b> happening right now, add <b>not</b> after am/is/are!</p>
+        <div class="example-box">He is <b>not</b> reading a book. 📖❌</div>
+        <div class="example-box green">I am <b>not</b> eating the salad. 🥗❌</div>
+        <div class="example-box orange">They are <b>not</b> walking home. 🚶❌</div>
+      </div>
+      <div class="exercise-card" style="border-left-color:var(--red)">
+        <h3>✍️ Write the negative!</h3>
+        <p style="margin-bottom:12px;color:#666;">Example: She / read ➡️ <b>She is not reading</b></p>
+        <div class="exercise-item">
+          <span>1. I / go to the party ➡️ I</span>
+          <input type="text" class="answer-input" id="pn1" placeholder="?" style="width:250px">
+        </div>
+        <div class="exercise-item">
+          <span>2. They / laugh at the clown ➡️ They</span>
+          <input type="text" class="answer-input" id="pn2" placeholder="?" style="width:250px">
+        </div>
+        <div class="exercise-item">
+          <span>3. The bird / fly ➡️ The bird</span>
+          <input type="text" class="answer-input" id="pn3" placeholder="?" style="width:250px">
+        </div>
+        <div class="exercise-item">
+          <span>4. The boys / kick the ball ➡️ The boys</span>
+          <input type="text" class="answer-input" id="pn4" placeholder="?" style="width:250px">
+        </div>
+        <div class="exercise-item">
+          <span>5. She / cook ➡️ She</span>
+          <input type="text" class="answer-input" id="pn5" placeholder="?" style="width:250px">
+        </div>
+        <button class="check-btn" onclick="checkAnswers(
+          ['pn1','pn2','pn3','pn4','pn5'],
+          [['am not going'],['are not laughing'],['is not flying'],['are not kicking'],['is not cooking']],
+          'pnResult'
+        )">Check My Answers! ✅</button>
+        <button class="reset-btn" onclick="resetInputs(['pn1','pn2','pn3','pn4','pn5'],'pnResult')">Try Again 🔄</button>
+        <div class="result-msg" id="pnResult"></div>
+      </div>
+    </div>
+
+    <div class="section-content" id="progQ">
+      <div class="theory-card" style="border-left-color:var(--purple)">
+        <h3>❓ Question Form</h3>
+        <p>To ask a question, put <b>am/is/are FIRST</b>!</p>
+        <div class="example-box">He is watching TV ➡️ <b>Is</b> he watching TV<b>?</b></div>
+        <div class="example-box green">They are sleeping ➡️ <b>Are</b> they sleeping<b>?</b></div>
+        <div class="example-box orange">You are waiting ➡️ <b>Are</b> you waiting<b>?</b></div>
+      </div>
+      <div class="exercise-card" style="border-left-color:var(--purple)">
+        <h3>✍️ Rewrite as a question!</h3>
+        <div class="exercise-item">
+          <span>1. She is working on her project. ➡️</span>
+          <input type="text" class="answer-input" id="pq1" placeholder="?" style="width:300px">
+        </div>
+        <div class="exercise-item">
+          <span>2. I am talking to you. ➡️</span>
+          <input type="text" class="answer-input" id="pq2" placeholder="?" style="width:300px">
+        </div>
+        <div class="exercise-item">
+          <span>3. We are listening to the concert. ➡️</span>
+          <input type="text" class="answer-input" id="pq3" placeholder="?" style="width:300px">
+        </div>
+        <button class="check-btn" onclick="checkProgQ()">Check! ✅</button>
+        <button class="reset-btn" onclick="resetInputs(['pq1','pq2','pq3'],'pqResult')">Try Again 🔄</button>
+        <div class="result-msg" id="pqResult"></div>
+      </div>
+    </div>
+  `;
+  window.showSection = function(id, btn) {
+    document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  };
+  window.checkProgQ = function() {
+    const answers = [
+      ['is she working on her project?'],
+      ['am i talking to you?','are you talking to me?'],
+      ['are we listening to the concert?']
+    ];
+    let correct = 0;
+    ['pq1','pq2','pq3'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      const val = el.value.trim().toLowerCase().replace(/\s+/g,' ');
+      if (answers[i].includes(val)) {
+        el.className = 'answer-input correct';
+        correct++;
+      } else {
+        el.className = 'answer-input incorrect';
+      }
+    });
+    const res = document.getElementById('pqResult');
+    res.classList.add('show');
+    if (correct === 3) { res.className = 'result-msg show great'; res.innerHTML = '🌟 Perfect! 🌟'; showConfetti(); }
+    else { res.className = 'result-msg show good'; res.innerHTML = '👍 ' + correct + '/3 correct! Keep trying!'; }
+  };
+};
+
+// ---------- 4. PUNCTUATION MARKS ----------
+lessons.punctuation = function() {
+  document.getElementById('lessonTitle').textContent = '❓ Punctuation Marks';
+  document.getElementById('lessonContent').innerHTML = `
+    <div class="theory-card">
+      <h3>📖 Three Important Marks!</h3>
+      <div class="example-box" style="font-size:1.2em;">
+        <span style="font-size:1.8em;">.</span>
+        <span><b>Period</b> - Used at the end of a <b>telling sentence</b>.<br>Example: I like dogs<b>.</b></span>
+      </div>
+      <div class="example-box green" style="font-size:1.2em;">
+        <span style="font-size:1.8em;">?</span>
+        <span><b>Question mark</b> - Used at the end of a <b>question</b>.<br>Example: Do you like dogs<b>?</b></span>
+      </div>
+      <div class="example-box pink" style="font-size:1.2em;">
+        <span style="font-size:1.8em;">!</span>
+        <span><b>Exclamation point</b> - Used when you feel <b>excited or surprised</b>!<br>Example: I love dogs<b>!</b></span>
+      </div>
+    </div>
+
+    <div class="exercise-card">
+      <h3>🎮 Choose the right punctuation mark!</h3>
+      <div id="punctGame"></div>
+      <div class="score-display" id="punctScore"></div>
+    </div>
+  `;
+
+  const punctData = [
+    { sentence: 'My dog is big and brown', answer: '.', type: 'telling' },
+    { sentence: 'Hurray, I won first place', answer: '!', type: 'exciting' },
+    { sentence: 'Can I help you', answer: '?', type: 'question' },
+    { sentence: 'Do you want some water', answer: '?', type: 'question' },
+    { sentence: 'Oh no, I lost my car keys', answer: '!', type: 'surprise' },
+    { sentence: 'I am 7 years old today', answer: '.', type: 'telling' },
+    { sentence: 'What is your name', answer: '?', type: 'question' },
+    { sentence: 'That is incredible', answer: '!', type: 'exciting' },
+    { sentence: 'She likes to read books', answer: '.', type: 'telling' },
+    { sentence: 'Where do you live', answer: '?', type: 'question' },
+  ];
+  let pIdx = 0, pScore = 0;
+
+  function showPunct() {
+    if (pIdx >= punctData.length) {
+      document.getElementById('punctGame').innerHTML = '<div style="text-align:center;font-size:1.3em;font-weight:800;color:#2E7D32;padding:20px;">🎉 Done! ' + pScore + '/' + punctData.length + ' correct!</div>';
+      document.getElementById('punctScore').innerHTML = pScore >= 8 ? '🌟 Amazing! 🌟' : '💪 Keep practicing!';
+      if (pScore >= 8) showConfetti();
+      return;
+    }
+    const q = punctData[pIdx];
+    document.getElementById('punctScore').textContent = 'Question ' + (pIdx+1) + ' of ' + punctData.length + ' | Score: ' + pScore;
+    document.getElementById('punctGame').innerHTML = `
+      <p style="font-size:1.3em;font-weight:700;text-align:center;margin:20px 0;">"${q.sentence}<span style="font-size:1.6em;color:#E91E63;">___</span>"</p>
+      <div style="display:flex;justify-content:center;gap:15px;">
+        <button class="prep-btn" style="font-size:2em;min-width:80px;" onclick="checkPunct(this,'.')">.</button>
+        <button class="prep-btn" style="font-size:2em;min-width:80px;" onclick="checkPunct(this,'?')">?</button>
+        <button class="prep-btn" style="font-size:2em;min-width:80px;" onclick="checkPunct(this,'!')">!</button>
+      </div>
+    `;
+  }
+  window.checkPunct = function(el, chosen) {
+    const correct = punctData[pIdx].answer;
+    const btns = el.parentElement.querySelectorAll('.prep-btn');
+    btns.forEach(b => {
+      b.style.pointerEvents = 'none';
+      if (b.textContent.trim() === correct) b.className = 'prep-btn correct';
+      else if (b === el && chosen !== correct) b.className = 'prep-btn wrong';
+    });
+    if (chosen === correct) pScore++;
+    setTimeout(() => { pIdx++; showPunct(); }, 1000);
+  };
+  showPunct();
+};
+
+// ---------- 5. TELLING SENTENCES ----------
+lessons.telling = function() {
+  document.getElementById('lessonTitle').textContent = '💬 Telling Sentences';
+  document.getElementById('lessonContent').innerHTML = `
+    <div class="theory-card">
+      <h3>📖 What is a Telling Sentence?</h3>
+      <p>A <b>telling sentence</b> (statement) gives us <b>information</b> about someone or something.</p>
+      <p style="margin-top:10px;">Rules:</p>
+      <div class="example-box">It begins with a <b>Capital Letter</b> 🔠</div>
+      <div class="example-box green">It ends with a <b>period (.)</b></div>
+      <div class="example-box orange">Example: <b>I</b> like to go to the park on Sundays<b>.</b></div>
+    </div>
+
+    <div class="exercise-card">
+      <h3>✍️ Rewrite correctly! (Start with capital letter, end with period)</h3>
+      <div class="exercise-item">
+        <span>1. my friend Sarah is coming to visit today</span>
+      </div>
+      <input type="text" class="answer-input" id="ts1" placeholder="Write the correct sentence..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item">
+        <span>2. the school is closed for the holidays today</span>
+      </div>
+      <input type="text" class="answer-input" id="ts2" placeholder="Write the correct sentence..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item">
+        <span>3. annie went to the store to buy candies</span>
+      </div>
+      <input type="text" class="answer-input" id="ts3" placeholder="Write the correct sentence..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item">
+        <span>4. we ate cookies during lunch</span>
+      </div>
+      <input type="text" class="answer-input" id="ts4" placeholder="Write the correct sentence..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item">
+        <span>5. she forgot her book at school</span>
+      </div>
+      <input type="text" class="answer-input" id="ts5" placeholder="Write the correct sentence..." style="width:100%;margin-bottom:15px;">
+      <button class="check-btn" onclick="checkTelling()">Check My Answers! ✅</button>
+      <button class="reset-btn" onclick="resetInputs(['ts1','ts2','ts3','ts4','ts5'],'tsResult')">Try Again 🔄</button>
+      <div class="result-msg" id="tsResult"></div>
+    </div>
+  `;
+  window.checkTelling = function() {
+    const answers = [
+      ['my friend sarah is coming to visit today.'],
+      ['the school is closed for the holidays today.'],
+      ['annie went to the store to buy candies.'],
+      ['we ate cookies during lunch.'],
+      ['she forgot her book at school.']
+    ];
+    let correct = 0;
+    ['ts1','ts2','ts3','ts4','ts5'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      const val = el.value.trim();
+      const lower = val.toLowerCase();
+      const startsUpper = val[0] === val[0].toUpperCase() && val[0] !== val[0].toLowerCase();
+      const endsPeriod = val.endsWith('.');
+      const contentMatch = answers[i].includes(lower.replace(/\.$/, '') + '.');
+      if (startsUpper && endsPeriod && contentMatch) {
+        el.className = 'answer-input correct';
+        correct++;
+      } else {
+        el.className = 'answer-input incorrect';
+      }
+    });
+    const res = document.getElementById('tsResult');
+    res.classList.add('show');
+    if (correct === 5) { res.className = 'result-msg show great'; res.innerHTML = '🌟 Perfect! 🌟'; showConfetti(); }
+    else { res.className = 'result-msg show good'; res.innerHTML = '👍 ' + correct + '/5! Remember: Capital letter + period!'; }
+  };
+};
+
+// ---------- 6. QUESTIONS ----------
+lessons.questions = function() {
+  document.getElementById('lessonTitle').textContent = '🤔 Question Sentences';
+  document.getElementById('lessonContent').innerHTML = `
+    <div class="theory-card">
+      <h3>📖 What is a Question?</h3>
+      <p>A question <b>asks</b> something. We want to know an answer!</p>
+      <div class="example-box">It begins with a <b>Capital Letter</b> 🔠</div>
+      <div class="example-box green">It ends with a <b>question mark (?)</b></div>
+      <div class="example-box orange">Example: <b>W</b>hat school do you go to<b>?</b></div>
+    </div>
+
+    <div class="exercise-card">
+      <h3>✍️ Rewrite as proper questions! (Capital letter + question mark)</h3>
+      <div class="exercise-item"><span>1. can you hold this for me</span></div>
+      <input type="text" class="answer-input" id="qs1" placeholder="Write the correct question..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item"><span>2. where do you live</span></div>
+      <input type="text" class="answer-input" id="qs2" placeholder="Write the correct question..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item"><span>3. can I go to the bathroom</span></div>
+      <input type="text" class="answer-input" id="qs3" placeholder="Write the correct question..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item"><span>4. are you coming with us</span></div>
+      <input type="text" class="answer-input" id="qs4" placeholder="Write the correct question..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item"><span>5. do you like apple pie</span></div>
+      <input type="text" class="answer-input" id="qs5" placeholder="Write the correct question..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item"><span>6. what is your name</span></div>
+      <input type="text" class="answer-input" id="qs6" placeholder="Write the correct question..." style="width:100%;margin-bottom:15px;">
+      <button class="check-btn" onclick="checkQuestions()">Check! ✅</button>
+      <button class="reset-btn" onclick="resetInputs(['qs1','qs2','qs3','qs4','qs5','qs6'],'qsResult')">Try Again 🔄</button>
+      <div class="result-msg" id="qsResult"></div>
+    </div>
+  `;
+  window.checkQuestions = function() {
+    const answers = [
+      'can you hold this for me?',
+      'where do you live?',
+      'can i go to the bathroom?',
+      'are you coming with us?',
+      'do you like apple pie?',
+      'what is your name?'
+    ];
+    let correct = 0;
+    ['qs1','qs2','qs3','qs4','qs5','qs6'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      const val = el.value.trim();
+      const startsUpper = val[0] && val[0] === val[0].toUpperCase() && val[0] !== val[0].toLowerCase();
+      const endsQ = val.endsWith('?');
+      const contentMatch = val.toLowerCase().replace(/\?$/, '').trim() === answers[i].replace(/\?$/, '').trim();
+      if (startsUpper && endsQ && contentMatch) {
+        el.className = 'answer-input correct'; correct++;
+      } else {
+        el.className = 'answer-input incorrect';
+      }
+    });
+    const res = document.getElementById('qsResult');
+    res.classList.add('show');
+    if (correct === 6) { res.className = 'result-msg show great'; res.innerHTML = '🌟 Perfect! 🌟'; showConfetti(); }
+    else { res.className = 'result-msg show good'; res.innerHTML = '👍 ' + correct + '/6! Remember: Capital letter + question mark!'; }
+  };
+};
+
+// ---------- 7. EXCLAMATORY ----------
+lessons.exclamatory = function() {
+  document.getElementById('lessonTitle').textContent = '😲 Exclamatory Sentences';
+  document.getElementById('lessonContent').innerHTML = `
+    <div class="theory-card">
+      <h3>📖 What is an Exclamatory Sentence?</h3>
+      <p>It shows <b>strong feelings</b> like surprise, excitement, or happiness!</p>
+      <div class="example-box">It begins with a <b>Capital Letter</b> 🔠</div>
+      <div class="example-box green">It ends with an <b>exclamation point (!)</b></div>
+      <div class="example-box pink">Example: <b>Y</b>ou are doing a great job<b>!</b> 🎉</div>
+    </div>
+
+    <div class="exercise-card">
+      <h3>✍️ Rewrite correctly! (Capital letter + exclamation point)</h3>
+      <div class="exercise-item"><span>1. what a wonderful surprise</span></div>
+      <input type="text" class="answer-input" id="ex1" placeholder="Write correctly..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item"><span>2. I cannot believe it</span></div>
+      <input type="text" class="answer-input" id="ex2" placeholder="Write correctly..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item"><span>3. go to your room now</span></div>
+      <input type="text" class="answer-input" id="ex3" placeholder="Write correctly..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item"><span>4. you are the best</span></div>
+      <input type="text" class="answer-input" id="ex4" placeholder="Write correctly..." style="width:100%;margin-bottom:15px;">
+      <div class="exercise-item"><span>5. that is incredible</span></div>
+      <input type="text" class="answer-input" id="ex5" placeholder="Write correctly..." style="width:100%;margin-bottom:15px;">
+      <button class="check-btn" onclick="checkExclam()">Check! ✅</button>
+      <button class="reset-btn" onclick="resetInputs(['ex1','ex2','ex3','ex4','ex5'],'exResult')">Try Again 🔄</button>
+      <div class="result-msg" id="exResult"></div>
+    </div>
+  `;
+  window.checkExclam = function() {
+    const answers = [
+      'what a wonderful surprise!',
+      'i cannot believe it!',
+      'go to your room now!',
+      'you are the best!',
+      'that is incredible!'
+    ];
+    let correct = 0;
+    ['ex1','ex2','ex3','ex4','ex5'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      const val = el.value.trim();
+      const startsUpper = val[0] && val[0] === val[0].toUpperCase() && val[0] !== val[0].toLowerCase();
+      const endsExcl = val.endsWith('!');
+      const contentMatch = val.toLowerCase().replace(/!$/, '').trim() === answers[i].replace(/!$/, '').trim();
+      if (startsUpper && endsExcl && contentMatch) {
+        el.className = 'answer-input correct'; correct++;
+      } else {
+        el.className = 'answer-input incorrect';
+      }
+    });
+    const res = document.getElementById('exResult');
+    res.classList.add('show');
+    if (correct === 5) { res.className = 'result-msg show great'; res.innerHTML = '🌟 Perfect! 🌟'; showConfetti(); }
+    else { res.className = 'result-msg show good'; res.innerHTML = '👍 ' + correct + '/5! Capital letter + exclamation point!'; }
+  };
+};
+
+// ---------- 8. COMPLETE SENTENCES ----------
+lessons.complete = function() {
+  document.getElementById('lessonTitle').textContent = '✏️ Complete Sentences';
+  document.getElementById('lessonContent').innerHTML = `
+    <div class="theory-card">
+      <h3>📖 What is a Complete Sentence?</h3>
+      <p>A complete sentence tells a <b>complete thought</b>. It has a <b>subject</b> (who/what) and a <b>predicate</b> (what happens).</p>
+      <p style="margin-top:10px;">It ends with a <b>period</b>, <b>question mark</b>, or <b>exclamation point</b>.</p>
+      <div class="example-box green">
+        ✅ <b>Correct:</b> I like to eat bananas and cereal for dinner.
+      </div>
+      <div class="example-box" style="background:#FFEBEE;">
+        ❌ <b>Incorrect:</b> I like (not a complete thought!)
+      </div>
+      <div class="example-box green">
+        ✅ <b>Correct:</b> Do you know how to ride a bike?
+      </div>
+      <div class="example-box" style="background:#FFEBEE;">
+        ❌ <b>Incorrect:</b> My brother and (not a complete thought!)
+      </div>
+    </div>
+
+    <div class="exercise-card">
+      <h3>🎮 Is it a Complete Sentence?</h3>
+      <div id="completeGame"></div>
+      <div class="score-display" id="completeScore"></div>
+    </div>
+
+    <div class="exercise-card" style="border-left-color:var(--purple)">
+      <h3>✍️ Complete each sentence to make it whole!</h3>
+      <div class="exercise-item">
+        <span>1. The tree house</span>
+        <input type="text" class="answer-input" id="cs1" placeholder="..." style="width:250px">
+      </div>
+      <div class="exercise-item">
+        <span>2. The sunset</span>
+        <input type="text" class="answer-input" id="cs2" placeholder="..." style="width:250px">
+      </div>
+      <div class="exercise-item">
+        <span>3. They are building</span>
+        <input type="text" class="answer-input" id="cs3" placeholder="..." style="width:250px">
+      </div>
+      <div class="exercise-item">
+        <span>4. Excuse me, can</span>
+        <input type="text" class="answer-input" id="cs4" placeholder="..." style="width:250px">
+      </div>
+      <p style="color:#666;margin-top:10px;font-style:italic;">Any answer that makes a complete thought is correct! Ask your parent to check. 😊</p>
+    </div>
+  `;
+
+  const compData = [
+    { sentence: 'I like to eat bananas and cereal for dinner.', answer: true },
+    { sentence: 'My brother and', answer: false },
+    { sentence: 'Do you know how to ride a bike?', answer: true },
+    { sentence: 'The big red', answer: false },
+    { sentence: 'She is playing with her friends.', answer: true },
+    { sentence: 'Running in the', answer: false },
+    { sentence: 'We are going to the park today.', answer: true },
+    { sentence: 'Under the old', answer: false },
+    { sentence: 'What a beautiful day!', answer: true },
+    { sentence: 'The dog and the cat', answer: false },
+  ];
+  let cIdx = 0, cScore = 0;
+
+  function showComplete() {
+    if (cIdx >= compData.length) {
+      document.getElementById('completeGame').innerHTML = '<div style="text-align:center;font-size:1.3em;font-weight:800;color:#2E7D32;padding:20px;">🎉 Done! ' + cScore + '/' + compData.length + ' correct!</div>';
+      document.getElementById('completeScore').innerHTML = cScore >= 8 ? '🌟 Amazing! 🌟' : '💪 Keep practicing!';
+      if (cScore >= 8) showConfetti();
+      return;
+    }
+    const q = compData[cIdx];
+    document.getElementById('completeScore').textContent = 'Question ' + (cIdx+1) + ' of ' + compData.length + ' | Score: ' + cScore;
+    document.getElementById('completeGame').innerHTML = `
+      <p style="font-size:1.3em;font-weight:700;text-align:center;margin:20px 0;padding:15px;background:#F5F5F5;border-radius:12px;">"${q.sentence}"</p>
+      <div style="display:flex;justify-content:center;gap:15px;">
+        <button class="prep-btn" style="background:#E8F5E9;min-width:150px;font-size:1.1em;" onclick="checkComplete(this,true,${q.answer})">✅ Complete!</button>
+        <button class="prep-btn" style="background:#FFEBEE;min-width:150px;font-size:1.1em;" onclick="checkComplete(this,false,${q.answer})">❌ Not Complete</button>
+      </div>
+    `;
+  }
+  window.checkComplete = function(el, chosen, correct) {
+    const btns = el.parentElement.querySelectorAll('.prep-btn');
+    btns.forEach(b => {
+      b.style.pointerEvents = 'none';
+      const isCorrectBtn = (correct && b.textContent.includes('Complete!')) || (!correct && b.textContent.includes('Not'));
+      if (isCorrectBtn) b.className = 'prep-btn correct';
+      else if (b === el && chosen !== correct) b.className = 'prep-btn wrong';
+    });
+    if (chosen === correct) cScore++;
+    setTimeout(() => { cIdx++; showComplete(); }, 1200);
+  };
+  showComplete();
+};
+</script>
+</body>
+</html>
